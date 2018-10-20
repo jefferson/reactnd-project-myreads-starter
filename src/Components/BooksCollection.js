@@ -1,36 +1,46 @@
 import React from 'react'
-// import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from '../BooksAPI'
 
 import BookGrid from './BookGrid';
 
 class BooksCollection extends React.Component {
 
-  shelves = [{ title: "Currently Reading", value: "currentlyReading" },
-  { title: "Want to Read", value: "wantToRead" },
-  { title: "Read", value: "read" },
-  { title: "None", value: "none" }];
+  shelves = [
+    { title: "Currently Reading", shelf: "currentlyReading" },
+    { title: "Want to Read", shelf: "wantToRead" },
+    { title: "Read", shelf: "read" },
+    { title: "None", shelf: "none" }
+  ];
 
   state = {
     books: []
   }
 
   componentDidMount() {
-
+    BooksAPI.getAll().then((data) => {
+      this.setState({
+        books: data
+      });
+      console.log(data);
+    })
   }
 
-  filterBooksBy = (category) => {
-    return this.state.books.filter(book => book.category === category);
+  filterBooksBy = (e) => {
+    return this.state.books.filter(book => book.shelf === e.shelf);
   };
 
-  moveBookTo = (id, category) => {
+  moveBookTo = (book, shelf) => {
 
     let books = this.state.books;
-    let book = books.find(book => book.id === id);
-    book.category = category;
+    let currentBook = books.find(item => item.id === book.id);
+    currentBook.shelf = shelf;
 
-    this.setState({
-      books: books
+    BooksAPI.update(currentBook, shelf).then((result) => {
+      this.setState({
+        books: books
+      })
     })
+
   };
 
   render() {
@@ -42,7 +52,7 @@ class BooksCollection extends React.Component {
         <div className="list-books-content">
           <div>
             {this.shelves.map(shelf => (
-              <BookGrid key={shelf.value} shelf={shelf} books={this.filterBooksBy(shelf.value)} move={this.moveBookTo} />
+              <BookGrid key={shelf.shelf} shelf={shelf} books={this.filterBooksBy(shelf)} move={this.moveBookTo} />
             ))}
           </div>
         </div>
