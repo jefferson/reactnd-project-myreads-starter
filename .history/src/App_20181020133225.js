@@ -17,7 +17,7 @@ class BooksApp extends React.Component {
 
   showSearch = (is) => {
     this.setState({
-      showSearchPage: is
+      showSearch: true
     })
   }
 

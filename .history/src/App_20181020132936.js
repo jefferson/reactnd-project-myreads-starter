@@ -17,7 +17,7 @@ class BooksApp extends React.Component {
 
   showSearch = (is) => {
     this.setState({
-      showSearchPage: is
+      showSearch: is
     })
   }
 
@@ -45,7 +45,7 @@ class BooksApp extends React.Component {
             </div>
           </div>
         ) : (
-            <BooksCollection showSearch={this.showSearch} />
+            <BooksCollection showSearch={showSearch} />
           )}
       </div>
     );

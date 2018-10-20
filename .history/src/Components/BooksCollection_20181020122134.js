@@ -1,0 +1,37 @@
+import React from 'react'
+// import * as BooksAPI from './BooksAPI'
+
+import BookGrid from './BookGrid';
+
+class BooksCollection extends React.Component {
+
+  state = {
+    categories: ['Currently Reading', 'Want to read', 'Read']
+  }
+
+  componentDidMount() {
+
+  }
+
+  render() {
+    return (
+      <div className="list-books">
+        <div className="list-books-title">
+          <h1>MyReads</h1>
+        </div>
+        <div className="list-books-content">
+          <div>
+            <BookGrid category="Currently Reading" />
+            <BookGrid category="Want to Read" />
+            <BookGrid category="Read" />
+          </div>
+        </div>
+        <div className="open-search">
+          <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default BooksCollection;
