@@ -1,9 +1,19 @@
 import React from 'react'
+import * as BooksAPI from '../BooksAPI'
 
 class Book extends React.Component {
 
+  moveBookTo = (shelf) => {
+
+    BooksAPI.update(this.props.book, shelf).then((result) => {
+      this.props.update()
+    })
+
+  };
+
+
   handleChange = (event) => {
-    this.props.move(this.props.book, event.target.value)
+    this.moveBookTo(event.target.value)
   }
 
   render() {
@@ -23,7 +33,7 @@ class Book extends React.Component {
             </div>
           </div>
           <div className="book-title">{this.props.book.title}</div>
-          <div className="book-authors">{this.props.book.authors.join(", ")}</div>
+          <div className="book-authors">{(this.props.book.authors || []).join(", ")}</div>
         </div>
       </li>
     );

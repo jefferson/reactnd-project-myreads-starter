@@ -1,6 +1,6 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import * as BooksAPI from '../BooksAPI'
-
 import BookGrid from './BookGrid';
 
 class BooksCollection extends React.Component {
@@ -16,12 +16,16 @@ class BooksCollection extends React.Component {
     books: []
   }
 
+
   componentDidMount() {
+    this.touch();
+  }
+
+  touch = () => {
     BooksAPI.getAll().then((data) => {
       this.setState({
         books: data
       });
-      console.log(data);
     })
   }
 
@@ -29,16 +33,14 @@ class BooksCollection extends React.Component {
     return this.state.books.filter(book => book.shelf === e.shelf);
   };
 
-  moveBookTo = (book, shelf) => {
+  update = (book) => {
 
     let books = this.state.books;
     let currentBook = books.find(item => item.id === book.id);
-    currentBook.shelf = shelf;
+    currentBook.shelf = book.shelf;
 
-    BooksAPI.update(currentBook, shelf).then((result) => {
-      this.setState({
-        books: books
-      })
+    this.setState({
+      books: books
     })
 
   };
@@ -52,12 +54,12 @@ class BooksCollection extends React.Component {
         <div className="list-books-content">
           <div>
             {this.shelves.map(shelf => (
-              <BookGrid key={shelf.shelf} shelf={shelf} books={this.filterBooksBy(shelf)} move={this.moveBookTo} />
+              <BookGrid key={shelf.shelf} shelf={shelf} update={this.touch} books={this.filterBooksBy(shelf)} />
             ))}
           </div>
         </div>
         <div className="open-search">
-          <a onClick={() => this.props.showSearch(true)}>Add a book</a>
+          <Link to="/search">Add a book</Link>
         </div>
       </div>
     );
