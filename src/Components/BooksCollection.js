@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import * as BooksAPI from '../BooksAPI'
 import BookGrid from './BookGrid';
 
 class BooksCollection extends React.Component {
@@ -12,37 +11,8 @@ class BooksCollection extends React.Component {
     { title: "None", shelf: "none" }
   ];
 
-  state = {
-    books: []
-  }
-
-
-  componentDidMount() {
-    this.touch();
-  }
-
-  touch = () => {
-    BooksAPI.getAll().then((data) => {
-      this.setState({
-        books: data
-      });
-    })
-  }
-
   filterBooksBy = (e) => {
-    return this.state.books.filter(book => book.shelf === e.shelf);
-  };
-
-  update = (book) => {
-
-    let books = this.state.books;
-    let currentBook = books.find(item => item.id === book.id);
-    currentBook.shelf = book.shelf;
-
-    this.setState({
-      books: books
-    })
-
+    return this.props.books.filter(book => book.shelf === e.shelf);
   };
 
   render() {
@@ -54,7 +24,7 @@ class BooksCollection extends React.Component {
         <div className="list-books-content">
           <div>
             {this.shelves.map(shelf => (
-              <BookGrid key={shelf.shelf} shelf={shelf} update={this.touch} books={this.filterBooksBy(shelf)} />
+              <BookGrid key={shelf.shelf} shelf={shelf} update={this.props.update} books={this.filterBooksBy(shelf)} />
             ))}
           </div>
         </div>

@@ -10,11 +10,23 @@ class Search extends React.Component {
   }
 
   updateQuery = (query) => {
-    BooksAPI.search(query).then((data) => {
-      this.setState({
-        books: data
+
+    if (query)
+      BooksAPI.search(query).then((data) => {
+        if (Array.isArray(data))
+          this.setState({
+            books: data
+          })
       })
-    })
+
+  }
+
+  getBooks = () => {
+    return this.state.books.map(book => {
+      console.log(this.props.getShelfByBookId);
+      book.shelf = this.props.getShelfByBookId(book.id);
+      return book;
+    });
   }
 
   render() {
@@ -38,8 +50,8 @@ class Search extends React.Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.state.books.map(book => (
-              <Book key={book.id} update={() => { }} book={book} />
+            {this.getBooks().map(book => (
+              <Book key={book.id} update={this.props.update} book={book} />
             ))}
           </ol>
         </div>
